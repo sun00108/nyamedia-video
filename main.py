@@ -112,6 +112,26 @@ def add_rss():
     db.add_series(series_id, rss_link, rss_source)
 
 
+def del_rss():
+    db = DBHelper()
+    series_id = input("请输入需要删除的剧集ID: ")
+    name = fetch_series_name(series_id)
+    confirm = input("剧集名： " + name + " ，是否确认删除？ (Y/N)")
+    if confirm == "Y":
+        db.del_series(series_id)
+    else:
+        return
+
+
+def list_rss():
+    db = DBHelper()
+    series_list = db.list_series()
+    for series in series_list:
+        name = fetch_series_name(series[0])
+        print(str(series[0]) + " - " + name + " - 数据源: " + str(series[2]))
+        print(series[1])
+
+
 def fetch_rss():
     db = DBHelper()
     ar = aria2p.API(
@@ -160,5 +180,7 @@ if __name__ == '__main__':
         db.setup()
     elif args.mode == "add":
         add_rss()
+    elif args.mode == "list":
+        list_rss()
     else:
         fetch_rss()
